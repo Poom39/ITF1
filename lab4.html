@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="phone.css">
+</head>
+<body>
+    <div class="header">
+        <h1 id="username">Username</h1>
+        <h1 id="phonebook">Phone book</h1>
+    </div>
+
+
+
+    <div class="profile">
+        <img id="profile-image" src="https://hips.hearstapps.com/hmg-prod/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=0.752xw:1.00xh;0.175xw,0&resize=1200:*" alt="">
+            <div class="notification">1</div>
+    </div>
+    <div class="form-group">
+        <label for="username-input">Set the Username
+        <input type="text" id="username-input" placeholder="Enter Username">
+        <button onclick="setUsername()">Set</button>
+        </label>
+    </div>
+
+    <div class="form-group">
+        <label for="image-url-input">Set the profile image URL
+        <input type="text" id="image-input" placeholder="Enter Image URL">
+        <button onclick="setImageURL()">SET</button>
+        </label>
+    </div>
+
+    <h2>Phone Number List</h2>
+    <div class="form-group">
+        <input type="text" id="name-input" placeholder="Name">
+        <input type="text" id="tel-input" placeholder="Tel">
+        <button onclick="addContact()">ADD</button>
+        <button onclick="exportContacts()">EXPORT</button>
+    </div>
+    <div>
+        <table id="phone_table" border="1">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Name</th>
+                    <th>Phone Number</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        const username = document.getElementById("username");
+        const input = document.getElementById("username-input");
+
+        function setUsername(){
+        console.log(input.value);
+        username.textContent = input.value;
+        input.value = "";
+        };
+
+        const image = document.getElementById("profile-image")
+        const imagelink = document.getElementById("image-input");
+
+        function setImageURL(){
+        console.log(imagelink.value)
+        image.src = imagelink.value;
+        imagelink.value = "";
+        };
+
+        function addContact() {
+        const nameInput = document.getElementById("name-input");
+        const telInput = document.getElementById("tel-input");
+        const table = document.getElementById("phone_table").getElementsByTagName('tbody')[0];
+
+        if (nameInput.value.trim() === "" || telInput.value.trim() === "") {
+                alert("Please enter both name and telephone number.");
+                return;
+        }
+
+        const newRow = table.insertRow();
+
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2);
+
+        cell1.textContent = table.rows.length;
+        cell2.textContent = nameInput.value;
+        cell3.textContent = telInput.value;
+
+        nameInput.value = "";
+        telInput.value = "";
+        }
+
+        function exportContacts() {
+        const table = document.getElementById("phone_table");
+        let csvContent = "";
+
+        for (let row of table.rows) {
+            let rowData = [];
+            for (let cell of row.cells) {
+                rowData.push(cell.textContent);
+            }
+            csvContent += rowData.join(",") + "\n";
+        }
+
+        const blob = new Blob([csvContent], { type: "text/csv" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("hidden", "");
+        a.setAttribute("href", url);
+        a.setAttribute("download", "contacts.csv");
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
